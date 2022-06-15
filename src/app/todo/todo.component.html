@@ -1,0 +1,68 @@
+<div
+  style="
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  "
+>
+  <label for="todo">Enter Text</label>
+  <input
+    id="todo"
+    type="text"
+    placeholder="Text"
+    [(ngModel)]="text"
+    (change)="getTodoData($event)"
+  />
+  <br />
+  <select [(ngModel)]="status" (change)="getStatus($event)">
+    <option value="pending">Not Started</option>
+    <option value="inprogress">In progress</option>
+    <option value="completed">Completed</option>
+  </select>
+  <br />
+  <button *ngIf="edit" (click)="saveChanges()">Save</button>
+  <button *ngIf="!edit" (click)="add()">Add</button>
+  <br />
+  <br />
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Status</th>
+      <th></th>
+    </tr>
+
+    <div *ngIf="list.length > 0; then data; else emp"></div>
+
+    <ng-template #data>
+      <tr
+        *ngFor="let data of list"
+        [ngClass]="{
+          completed: data.status === 'completed',
+          pending: data.status === 'pending',
+          progress: data.status === 'inprogress'
+        }"
+      >
+        <td>
+          {{ data.text }}
+        </td>
+        <td>
+          {{ data.status }}
+        </td>
+        <td>
+          <button (click)="editTodo(data.id)">Edit</button>
+          &nbsp; &nbsp;
+          <button (click)="deleteTodo(data.id)">Delete</button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emp>
+      <tr>
+        No items present
+      </tr>
+    </ng-template>
+  </table>
+</div>
